@@ -1,6 +1,6 @@
 ## DataCon-方向三-攻击源与攻击者分析-writeup
 ### BlueThanos战队
-![904c2e277e434e847ebc266629eed512.png](en-resource://database/783:1)
+!](https://raw.githubusercontent.com/ReAbout/datacon/master/files/1.png)
 
 ### 0x01比赛要求
 本题设置了多个维度的网络行为数据，涉及到不同类不同维度的数据源，包含web告警信息，ip基础信息，域名信息，whois信息，日常访问行为信息，终端行为信息等。考察选手如何通过多维度的数据源体系化的描绘一个攻击者，设计并建立一套分析方法，综合各维度数据对攻击者进行分析，描绘出可能对大会威胁最大的攻击者。
@@ -48,7 +48,7 @@
 * 紫色块：外部数据源
 * 灰色块：拓展数据
 
-![c642f8a33aaf9db1d30c997288abe4c6.png](en-resource://database/715:1)
+![](https://raw.githubusercontent.com/ReAbout/datacon/master/files/2.png)
 ##### 2）数据处理中间结果及逻辑
 >分攻击侧和目标服务器侧两类中间数据集，支撑后期分析使用。
 主要数据处理为生成聚类和分析能力的逻辑。进行贴标签，扫描器识别，操作类型识别（详情见3攻击矩阵），webshell识别归类，攻击类型识别，以及相关数据统计。
@@ -58,14 +58,14 @@
 * webshell中间结果主要用于关联攻击者，描述攻击目标情况
 * IP行为块中间结果主要用于攻击者目的和行为分析
 
-![962b277e494f0770a107979114bab291.png](en-resource://database/725:1)
+![](https://raw.githubusercontent.com/ReAbout/datacon/master/files/3.png)
 ##### 3）攻击矩阵
 攻击矩阵中的技术内容就是本文中的操作类型。
 >借鉴att&ck模型，依照本数据情况进行定义生命周期如下图。
 由于漏洞检测和漏洞利用测试仅通过当前数据难以区分归为一类。
 阶段3的定义目的主要在于寻求漏洞测试和持久化的桥梁，以此构建成攻击链。
 
-![54ebd2a175845ad9e7b4aef98081cc0c.png](en-resource://database/719:1)
+![](https://raw.githubusercontent.com/ReAbout/datacon/master/files/4.png)
 操作类型：
 sql_injection,SQL注入漏洞利用   
 vul_asp_resolve,iis6.0解析漏洞   
@@ -223,7 +223,7 @@ user agent记录这攻击者浏览器和操作系统情况，但是agent很容�
 
 规则4、5、6、产生的IP集合列表都是小概率来自同一攻击者。用并查集分别集合规则4、5、6产生的ip集合，得到3个列表ABC，每个列表都是不同规则产生集合整合后的不相交集合。
 A、B、C列表合成一个大列表，得到D,一个大的ip_date集合的列表，然后将D中的每一元素作为事务数据，运用fp growth搜寻频繁项集，minsup=2.即寻找一些ip集k，其满足在ABC中出现过两次.即
-![23946582dfb295be1bc5cefc62fb8623.png](en-resource://database/723:1)
+![](https://raw.githubusercontent.com/ReAbout/datacon/master/files/5.png)
 
 最后用并查集将k的集合整合成不相交集合K，K中的每一元素都认为是来自同一个攻击者。
 处理部分代码：
