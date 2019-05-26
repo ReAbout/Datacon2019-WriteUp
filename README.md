@@ -1,6 +1,6 @@
-## DataCon-攻击源与攻击者分析-writeup
+## DataCon-方向三-攻击源与攻击者分析-writeup
 ### BlueThanos战队
-![904c2e277e434e847ebc266629eed512.png](en-resource://database/783:0)
+![904c2e277e434e847ebc266629eed512.png](en-resource://database/783:1)
 
 ### 0x01比赛要求
 本题设置了多个维度的网络行为数据，涉及到不同类不同维度的数据源，包含web告警信息，ip基础信息，域名信息，whois信息，日常访问行为信息，终端行为信息等。考察选手如何通过多维度的数据源体系化的描绘一个攻击者，设计并建立一套分析方法，综合各维度数据对攻击者进行分析，描绘出可能对大会威胁最大的攻击者。
@@ -20,6 +20,7 @@
 * 识别的标签
 * 识别的操作类型
 * 识别的攻击类型
+* 机器学习方法使用
 
 2.制定IP关联规则
 主要8个规则
@@ -66,20 +67,20 @@
 
 ![54ebd2a175845ad9e7b4aef98081cc0c.png](en-resource://database/719:1)
 操作类型：
-sql_injection,SQL注入漏洞利用
-vul_asp_resolve,iis6.0解析漏洞
-vul_struts2_rce,struts2漏洞远程执行
-vul_xss,XSS漏洞利用
-vul_include_fie,文件包含漏洞
-vul_code_leak,代码托管配置信息导致源码泄露
-vul_dede_plus_download,dedecms-download文件漏洞远程执行
-vul_thinkphp_5_route_rce,thnkphp5路由漏洞远程执行
-vul_thinkphp_3.2_rce,thinkphp3.2漏洞远程执行
-vul_thinkphp_rce,thinkphp漏洞远程执行
-vul_backup_rar,备份文件导致源码泄露 
-vul_search_tool_rce,查询工具代码执行漏洞
-vul_fck_upload,fckeditor绕过限制上传
-vul_eweb_upload,ewebeditor绕过限制上传
+sql_injection,SQL注入漏洞利用   
+vul_asp_resolve,iis6.0解析漏洞   
+vul_struts2_rce,struts2漏洞远程执行   
+vul_xss,XSS漏洞利用   
+vul_include_fie,文件包含漏洞   
+vul_code_leak,代码托管配置信息导致源码泄露    
+vul_dede_plus_download,dedecms-download文件漏洞远程执行   
+vul_thinkphp_5_route_rce,thnkphp5路由漏洞远程执行   
+vul_thinkphp_3.2_rce,thinkphp3.2漏洞远程执行   
+vul_thinkphp_rce,thinkphp漏洞远程执行   
+vul_backup_rar,备份文件导致源码泄露    
+vul_search_tool_rce,查询工具代码执行漏洞   
+vul_fck_upload,fckeditor绕过限制上传   
+vul_eweb_upload,ewebeditor绕过限制上传   
 ...
 ##### 4）识别的标签
 >标签的识别主要是通过正则匹配实现的，webshell的识别，可以运用机器学习的方法，方法是通过脚本采集chopper、蚁剑等webshell的http request，然后抽取特征作为训练集合，训练构建模型进行识别。
@@ -148,6 +149,19 @@ appscan appscan
 ##### 4）识别的攻击类型
 通过IP行为块的目标和操作类型，来识别攻击类型。
 主要分为：单网站的漏洞扫描、同漏洞批量扫描、web渗透、高级web渗透
+##### 5）机器学习方法使用
+1. 恶意HTTP Request检测问题
+* 定义目标问题
+二分类问题，预测流量是攻击还是异常。
+数据特点是样本不均衡，攻击样本远多于正常，占比约为12:1。我们加入了一些正常流量数据。
+
+* 特征工程
+利用TFIDF来提取特征。
+* 训练模型和模型评估
+使用了逻辑回归和lightgbm两个模型训练数据。
+在正则匹配的基础上，又通过机器学习方法增加识别了2800多条攻击日志。
+2. Webshell通信检测分类问题
+3. Webshell文件检测及分类问题
 #### 2.IP的关联规则
 说明：由于国内情况大多数IP地址是动态分配，所以定义IP+日期（103.70.225.5_2018-12-27）取代ip为目标单位元。
 因为没有验证数据的支撑，IP的关联原则主要是基于专家经验原则。
@@ -341,6 +355,8 @@ PS：现有数据较难进行量化分析。一是对于日志数据，尤其是
 ### 0x04 部分结果分析
 “2-8原则 ” ：20%黑产攻击者产生的攻击日志占绝大部分（80%）
 攻击工具的易获取性导致多数攻击者行为相似（cfreer）
+#### 追踪溯源预览
+（略）
 ### 0x05 存在问题
 1.日志文件缺少状态码，对攻击的有效性难以判定。
 2.时间精度（min）太低，无法判断人工或自动化攻击。
