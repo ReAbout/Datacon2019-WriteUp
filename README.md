@@ -32,7 +32,7 @@
 * 能力分析
  主要分为1)攻击的广度与深度、2)攻击复杂性分析、3)漏洞利用能力、4)攻破防护能力、5)反溯源能力。 前两个是定性分析，后三个可定量分析。
 
-5.构建模型，量化能力等级
+5. 构建模型，量化能力等级
 ### 0x03系统设计
 #### 1.日志数据预处理
 ##### 1)数据处理类型
@@ -90,12 +90,7 @@ vul_eweb_upload,ewebeditor绕过限制上传
 部分规则：
 ```
 \'*(\s|\+|/\*\.*\*/)*(or|and)(\s|\+|/\*\.*\*/)+  vul_sql_injection   NaN
-updatexml\(  vul_sql_injection  NaN
 (=|\s+|\++|\(|\)|')select(\s+|\++|\(|\)) sql_select NaN
-...
-phpinfo  phpinfo  php
-(?:base64_decode|base64_encode|edoced_46esab)  base64encode  php
-&arrs\d\[\d*\]  encryption_arrs  php
 ...
 ```
 2. info类标签
@@ -107,7 +102,6 @@ phpinfo  phpinfo  php
 Content-Disposition:.*((filename|name)=("|')|Content-Type:|form-data;) upload_with_payload
 \w*(attachments|upimg|images|uploadfilesuploads|forumdata|upload|cache|avatar|upload)\w*(\.(jsp|do|action|php)|/) 
 ......
-phpmyadmin phpmyadmin
 ```
 3. scanner类标签
 共计10余条拓展信息，识别是否具有扫描器特征。
@@ -173,35 +167,19 @@ webshell一般较为文件隐蔽并且具有连接字符串，所以在排除进
 排除通用后的，部分webshell连接字符：
 ```
 { 
- '731046538',
- 'Cne123',
- 'Hzllaga',
+
  'MH',
  'autoshell',
  'buselr12',
  'chase',
  'coco',
-...
- 'hzllaga',
- 'juhua',
- 'lequ',
- 'lpy',
- 'niyade',
- ...
- 'tomato',
- 'will',
- 'xiaoliang',
- 'xise',
- 'xman111',
- 'ysh',
- 'yuyan'}
+...}
 ```
 ##### rule_3:特有的hacker logo[极大概率]
 攻击者一般会有自己的hacker name，通常会print（echo）打印到页面。
 例如：
 ```
 haorenge.comQQ317275738
-This is a test -by cfreer websec
 ...
 ```
 ##### rule_4:不同日期的相同IP[大概率]
@@ -335,7 +313,7 @@ webshell密码的复杂性 password复杂度.
 排除sanner的漏洞利用情况，统计漏洞利用数量来评判。
 优化方法：对不同漏洞利用进行评级，增加难度权重。（未实现）
 ##### 2）0day漏洞利用能力
-评价能力的重要标准。
+评价能力的重要标准。该漏洞所处的生命周期，0day，1day ...nday
 ##### 3)拥有的webshell目标数量
 数据有webshell侧中间结果集提供。
 
@@ -354,6 +332,7 @@ PS：现有数据较难进行量化分析。一是对于日志数据，尤其是
 ### 0x04 部分结果分析
 “2-8原则 ” ：20%黑产攻击者产生的攻击日志占绝大部分（80%）
 攻击工具的易获取性导致多数攻击者行为相似（cfreer）
+......
 #### 追踪溯源预览
 （略）
 ### 0x05 存在问题
